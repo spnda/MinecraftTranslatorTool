@@ -46,7 +46,7 @@ namespace MinecraftTranslatorTool.Views {
             } else {
                 defaultTranslations = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(defaultFile));
                 if (File.Exists(translationFile)) newTranslations = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(translationFile));
-                else newTranslations = new Dictionary<string, string>();
+                if (newTranslations == null) newTranslations = new Dictionary<string, string>();
                 foreach (KeyValuePair<string, string> translation in defaultTranslations) {
                     bool translated = newTranslations.ContainsKey(translation.Key);
                     items.Add(new TranslationItem() {

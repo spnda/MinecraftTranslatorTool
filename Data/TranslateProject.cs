@@ -32,5 +32,10 @@ namespace MinecraftTranslatorTool.Data {
             }
             return ret;
         }
+
+        public void AddLanguage(CultureInfo cultureInfo) {
+            string filePath = Path.Combine(ProjectFolder, $"{cultureInfo.Name.ToLower()}.json");
+            File.Create(filePath).Close();
+        }
     }
 }

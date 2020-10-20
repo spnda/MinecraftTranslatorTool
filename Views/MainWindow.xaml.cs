@@ -49,6 +49,17 @@ namespace MinecraftTranslatorTool.Views {
         }
 
         /// <summary>
+        /// Handles selection changes in the ProjectsList ListView.
+        /// </summary>
+        private void ProjectsListSelected(object sender, SelectionChangedEventArgs e) {
+            TranslateProject project = ProjectsList.Items[ProjectsList.SelectedIndex] as TranslateProject;
+            if (project == null) return;
+            foreach (var item in project.GetLanguages()) {
+                LanguageList.Items.Add(item);
+            }
+        }
+
+        /// <summary>
         /// Handles clicks on the "Create new project" button.
         /// Opens the CreateProject window 
         /// </summary>
@@ -59,13 +70,18 @@ namespace MinecraftTranslatorTool.Views {
         }
 
         /// <summary>
-        /// Handles selection changes in the ProjectsList ListView.
+        /// Handles clicks on the "Add new Language" button.
         /// </summary>
-        private void ProjectsListSelected(object sender, SelectionChangedEventArgs e) {
-            TranslateProject project = ProjectsList.Items[ProjectsList.SelectedIndex] as TranslateProject;
-            if (project == null) return;
-            foreach (var item in project.GetLanguages()) {
-                LanguageList.Items.Add(item);
+        private void NewLanguageClick(object sender, RoutedEventArgs e) {
+            if (NewLanguageBox.Text == string.Empty) return;
+            try {
+                CultureInfo cultureInfo = new CultureInfo(NewLanguageBox.Text);
+                TranslateProject project = ProjectsList.Items[ProjectsList.SelectedIndex] as TranslateProject;
+                if (project == null) return;
+                project.AddLanguage(cultureInfo);
+                LanguageList.Items.Add(cultureInfo);
+            } catch {
+                MessageBox.Show("The language you entered is not valid.");
             }
         }
     }
