@@ -14,12 +14,25 @@
 
         <Button Grid.Row="0" Content="Create new project" Click="CreateNewClick" Margin="0,10,10,0" HorizontalAlignment="Right" Width="120" Height="30" VerticalAlignment="Top" />
 
-        <ListView Grid.Row="1" x:Name="ProjectsList" MouseDoubleClick="ProjectDoubleClick">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding Name}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ListView Grid.Column="0" x:Name="ProjectsList" SelectionChanged="ProjectsListSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Name}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ListView Grid.Column="1" x:Name="LanguageList" MouseDoubleClick="ProjectDoubleClick">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
     </Grid>
 </Window>

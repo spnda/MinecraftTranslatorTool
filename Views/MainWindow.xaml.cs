@@ -1,7 +1,9 @@
 ﻿using MinecraftTranslatorTool.Data;
 using Newtonsoft.Json;
+using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MinecraftTranslatorTool.Views {
@@ -12,6 +14,7 @@ namespace MinecraftTranslatorTool.Views {
         public MainWindow() {
             InitializeComponent();
             Title = "MinecraftTranslatorTool";
+            ProjectsList.SelectedIndex = 0;
 
             LoadProjects();
         }
@@ -32,13 +35,15 @@ namespace MinecraftTranslatorTool.Views {
         }
 
         /// <summary>
-        /// Handles double click on a TranslateProject in the ProjectsList ListView.
+        /// Handles double click on a CultureInfo in the LanguageList ListView.
         /// Opens a new TranslateWindow for the clicked project.
         /// </summary>
         private void ProjectDoubleClick(object sender, MouseButtonEventArgs e) {
             TranslateProject project = ProjectsList.Items[ProjectsList.SelectedIndex] as TranslateProject;
             if (project == null) return;
-            TranslateWindow window = new TranslateWindow(project, "de_de");
+            CultureInfo cultureInfo = LanguageList.Items[LanguageList.SelectedIndex] as CultureInfo;
+            if (cultureInfo == null) return;
+            TranslateWindow window = new TranslateWindow(project, cultureInfo.Name);
             window.Show();
             this.Close();
         }
@@ -51,6 +56,17 @@ namespace MinecraftTranslatorTool.Views {
             CreateProject createNewWindow = new CreateProject();
             createNewWindow.ShowDialog();
             LoadProjects();
+        }
+
+        /// <summary>
+        /// Handles selection changes in the ProjectsList ListView.
+        /// </summary>
+        private void ProjectsListSelected(object sender, SelectionChangedEventArgs e) {
+            TranslateProject project = ProjectsList.Items[ProjectsList.SelectedIndex] as TranslateProject;
+            if (project == null) return;
+            foreach (var item in project.GetLanguages()) {
+                LanguageList.Items.Add(item);
+            }
         }
     }
 }

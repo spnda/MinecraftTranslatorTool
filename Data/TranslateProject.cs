@@ -1,4 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 
 namespace MinecraftTranslatorTool.Data {
     public class TranslateProject {
@@ -16,5 +19,18 @@ namespace MinecraftTranslatorTool.Data {
 
         [JsonIgnore]
         public string ProjectFolder { get; set; }
+
+        public List<CultureInfo> GetLanguages() {
+            var ret = new List<CultureInfo>();
+            foreach (string file in Directory.GetFiles(ProjectFolder)) {
+                try {
+                    CultureInfo info = new CultureInfo(Path.GetFileNameWithoutExtension(file));
+                    ret.Add(info);
+                } catch {
+                    continue;
+                }
+            }
+            return ret;
+        }
     }
 }

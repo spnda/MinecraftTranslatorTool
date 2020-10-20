@@ -12,7 +12,7 @@ namespace MinecraftTranslatorTool.Views {
     /// Interaction logic for TranslateWindow.xaml
     /// </summary>
     public partial class TranslateWindow : Window {
-        private new string Language = "de_de";
+        private new string Language = "en_us";
 
         private bool Changed = false;
 
@@ -27,7 +27,7 @@ namespace MinecraftTranslatorTool.Views {
             this.Language = language;
             if (project != null) {
                 this.project = project;
-                Title = $"Project - {project.Name}";
+                Title = $"Project - {this.project.Name} ({this.Language})";
 
                 LoadTranslations();
                 StringsList.SelectedIndex = 0;
