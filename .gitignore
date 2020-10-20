@@ -1,0 +1,19 @@
+# Builds
+[Bb]in/
+[Oo]bj/
+
+# NuGet Packages
+**/packages/*
+!**/packages/build/
+
+## IDEs
+# VS
+.vs/
+*.psess
+*.vsp
+*.vspx
+*.suo
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
