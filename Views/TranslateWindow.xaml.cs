@@ -1,4 +1,5 @@
 ﻿using MinecraftTranslatorTool.Data;
+using MinecraftTranslatorTool.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -121,7 +122,13 @@ namespace MinecraftTranslatorTool.Views {
                     Console.WriteLine($"\"{translation.Key}\": \"{translation.Value}\"");
                     defaultFile = defaultFile.Replace($"\"{translation.Key}\": \"{translation.Value}\"", $"\"{translation.Key}\": \"{newTranslation}\"");
                 } catch (KeyNotFoundException) {
-                    defaultFile = defaultFile.Replace($"\n  \"{translation.Key}\": \"{translation.Value}\",", "");
+                    string key = $"\n  \"{translation.Key}\": \"{translation.Value}\"";
+                    int keyIndex = defaultFile.IndexOf(key);
+                    if (keyIndex == -1) continue;
+                    // Remove the key because no translation has been found.
+                    defaultFile = defaultFile.Remove(keyIndex, key.Length);
+                    // Also remove trailing comma if it exists
+                    if (defaultFile[keyIndex] == ',') defaultFile = defaultFile.Remove(keyIndex, 1);
                     continue;
                 }
             }
@@ -129,6 +136,13 @@ namespace MinecraftTranslatorTool.Views {
             // These are usually caused by sections of translations missing in the 
             // translated document.
             defaultFile = Regex.Replace(defaultFile, @"(^\s*$\n){2,}", string.Empty, RegexOptions.Multiline);
+
+            // The last string value has a comma which invalidates the JSON.
+            int lastIndexOfQuotes = defaultFile.LastIndexOf('"');
+            int lastIndexOfCommas = defaultFile.LastIndexOf(',');
+            if (lastIndexOfQuotes != -1 && lastIndexOfCommas != -1 && lastIndexOfQuotes < lastIndexOfCommas) {
+                defaultFile = defaultFile.RemoveLast(",");
+            }
 
             string newFile = Path.Combine(this.project.ProjectFolder, $"{this.Language.Name.ToLower().Replace('-', '_')}.json");
             if (!File.Exists(newFile)) File.Create(newFile).Close();
