@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,7 +13,7 @@ namespace MinecraftTranslatorTool.Views {
     /// Interaction logic for TranslateWindow.xaml
     /// </summary>
     public partial class TranslateWindow : Window {
-        private new string Language = "en_us";
+        private new CultureInfo Language;
 
         private bool Changed = false;
 
@@ -22,7 +23,7 @@ namespace MinecraftTranslatorTool.Views {
 
         public TranslateProject project;
 
-        public TranslateWindow(TranslateProject project, string language) {
+        public TranslateWindow(TranslateProject project, CultureInfo language) {
             InitializeComponent();
             this.Language = language;
             if (project != null) {
@@ -40,7 +41,7 @@ namespace MinecraftTranslatorTool.Views {
         /// </summary>
         private void LoadTranslations() {
             string defaultFile = Path.Combine(this.project.ProjectFolder, $"{this.project.OriginalLanguage}.json");
-            string translationFile = Path.Combine(this.project.ProjectFolder, $"{this.Language}.json");
+            string translationFile = Path.Combine(this.project.ProjectFolder, $"{this.Language.Name.ToLower().Replace('-', '_')}.json");
             if (!File.Exists(defaultFile)) {
                 MessageBox.Show("Default language file not present. Can't load project.");
             } else {
@@ -129,7 +130,7 @@ namespace MinecraftTranslatorTool.Views {
             // translated document.
             defaultFile = Regex.Replace(defaultFile, @"(^\s*$\n){2,}", string.Empty, RegexOptions.Multiline);
 
-            string newFile = Path.Combine(this.project.ProjectFolder, $"{this.Language}.json");
+            string newFile = Path.Combine(this.project.ProjectFolder, $"{this.Language.Name.ToLower().Replace('-', '_')}.json");
             if (!File.Exists(newFile)) File.Create(newFile).Close();
             File.WriteAllText(newFile, defaultFile);
         }

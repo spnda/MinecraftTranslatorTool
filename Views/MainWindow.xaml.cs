@@ -43,7 +43,7 @@ namespace MinecraftTranslatorTool.Views {
             if (project == null) return;
             CultureInfo cultureInfo = LanguageList.Items[LanguageList.SelectedIndex] as CultureInfo;
             if (cultureInfo == null) return;
-            TranslateWindow window = new TranslateWindow(project, cultureInfo.Name);
+            TranslateWindow window = new TranslateWindow(project, cultureInfo);
             window.Show();
             this.Close();
         }

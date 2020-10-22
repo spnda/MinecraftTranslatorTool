@@ -33,9 +33,15 @@ namespace MinecraftTranslatorTool.Data {
             return ret;
         }
 
+        /// <summary>
+        /// Add a new language to the project. This will create a new JSON file in the 
+        /// ProjectFolder from given CultureInfo, e.g. 'de_de.json'.
+        /// </summary>
+        /// <param name="cultureInfo"></param>
         public void AddLanguage(CultureInfo cultureInfo) {
-            string filePath = Path.Combine(ProjectFolder, $"{cultureInfo.Name.ToLower()}.json");
+            string filePath = Path.Combine(ProjectFolder, $"{cultureInfo.Name.ToLower().Replace('-', '_')}.json");
             File.Create(filePath).Close();
+            File.WriteAllText(filePath, "{}"); // Make it a valid JSON
         }
     }
 }
